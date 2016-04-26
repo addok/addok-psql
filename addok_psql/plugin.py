@@ -1,11 +1,11 @@
-from addok import hooks, config
+from addok import config
 from addok.helpers import import_by_path, iter_pipe
 from addok.batch import batch
 
 
 def preprocess():
     # Do not import at load time, because we don't want to have a hard
-    # dependency to psycopg2, which is imported on nominatim module.
+    # dependency to psycopg2.
     PSQL_PROCESSORS = [import_by_path(path) for path in config.PSQL_PROCESSORS]
     return iter_pipe(None, PSQL_PROCESSORS)
 
@@ -22,14 +22,12 @@ def process(args):
     batch(preprocess())
 
 
-@hooks.register
-def addok_preconfigure(config):
+def preconfigure(config):
     from . import config as localconfig
     config.extend_from_object(localconfig)
 
 
-@hooks.register
-def addok_register_command(subparsers):
+def register_command(subparsers):
     parser = subparsers.add_parser('psql', help='Import from PostgreSQL')
     parser.set_defaults(func=process)
     parser.add_argument('--dbhost', help='PostgreSQL host')
