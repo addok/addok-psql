@@ -6,7 +6,7 @@ from addok.batch import batch
 def preprocess():
     # Do not import at load time, because we don't want to have a hard
     # dependency to psycopg2.
-    PSQL_PROCESSORS = [import_by_path(path) for path in config.PSQL_PROCESSORS]
+    PSQL_PROCESSORS = [import_by_path(path) for path in config.config.PSQL_PROCESSORS]
     return iter_pipe(None, PSQL_PROCESSORS)
 
 
@@ -16,9 +16,9 @@ def process(args):
     for key in keys:
         value = getattr(args, key, None)
         if value:
-            config.PSQL[key.upper()] = value
+            config.config.PSQL[key.upper()] = value
     if args.limit:
-        config.PSQL_LIMIT = args.limit
+        config.config.PSQL_LIMIT = args.limit
     batch(preprocess())
 
 
