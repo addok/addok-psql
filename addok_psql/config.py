@@ -8,7 +8,9 @@ PSQL_PROCESSORS = (
     'addok_psql.processors.row_to_doc',
 )
 PSQL_QUERY = """SELECT osm_type,osm_id,class,type,admin_level,rank_search,
-             place_id,parent_place_id,street,postcode,
+             place_id,parent_place_id,
+             address->'street' as street,
+             postcode,
              (extratags->'ref') as ref,
              ST_X(ST_Centroid(geometry)) as lon,
              ST_Y(ST_Centroid(geometry)) as lat,
