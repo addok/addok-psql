@@ -1,4 +1,4 @@
-from addok import config
+from addok.config import config
 from addok.helpers import import_by_path, iter_pipe
 from addok.batch import batch
 

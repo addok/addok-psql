@@ -6,7 +6,7 @@ import psycopg2.extras
 import psycopg2
 import psycopg2.extras
 
-from addok import config
+from addok.config import config
 from addok.helpers import yielder
 
 
