@@ -6,6 +6,8 @@ import psycopg2.extras
 import psycopg2
 import psycopg2.extras
 
+import json
+
 from addok.config import config
 from addok.helpers import yielder
 
