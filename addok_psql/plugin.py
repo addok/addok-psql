@@ -4,10 +4,7 @@ from addok.batch import batch
 
 
 def preprocess():
-    # Do not import at load time, because we don't want to have a hard
-    # dependency to psycopg2.
-    PSQL_PROCESSORS = [import_by_path(path) for path in config.PSQL_PROCESSORS]
-    return iter_pipe(None, PSQL_PROCESSORS)
+    return iter_pipe(None, config.PSQL_PROCESSORS)
 
 
 def process(args):
