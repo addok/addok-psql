@@ -12,7 +12,7 @@ def preprocess():
 
 def process(args):
     print('Import from Postgresql')
-    keys = ['dbname', 'user', 'host', 'port']
+    keys = ['dbname', 'user', 'host', 'port', 'password']
     for key in keys:
         value = getattr(args, key, None)
         if value:
@@ -32,6 +32,7 @@ def register_command(subparsers):
     parser.set_defaults(func=process)
     parser.add_argument('--host', help='PostgreSQL host')
     parser.add_argument('--user', help='PostgreSQL user')
-    parser.add_argument('--dbname', help='PostgreSQL name')
+    parser.add_argument('--dbname', help='PostgreSQL database name')
+    parser.add_argument('--password', help='PostgreSQL password user')
     parser.add_argument('--port', help='PostgreSQL port')
     parser.add_argument('--limit', help='Limit retrieved rows')

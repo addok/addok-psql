@@ -2,9 +2,7 @@
 
 import psycopg2
 import psycopg2.extras
-
-import psycopg2
-import psycopg2.extras
+import json
 
 from addok.config import config
 from addok.helpers import yielder
@@ -27,16 +25,17 @@ def query(*args):
     print('Query executed with itersize', cur.itersize)
 
     for row in cur.__iter__():
-        yield dict(row)
+        yield json.dumps(dict(row))
     cur.close()
 
 
 @yielder
-def get_context(row):
+def get_context(raw):
+    row = json.loads(raw)
     if "context" not in row:
         row['context'] = []
     add_parent(row, row)
-    return row
+    return json.dumps(row)
 
 
 def add_parent(child, row):
@@ -63,7 +62,8 @@ def add_parent_data(parent, row):
 
 
 @yielder
-def get_housenumbers(row):
+def get_housenumbers(raw):
+    row = json.loads(raw)
     if row['class'] == 'highway':
         sql = """SELECT housenumber, ST_X(ST_Centroid(geometry)) as lon,
             ST_Y(ST_Centroid(geometry)) as lat
@@ -79,11 +79,12 @@ def get_housenumbers(row):
             hn['housenumber']: {'lat': hn['lat'], 'lon': hn['lon']}
             for hn in housenumbers
         }
-    return row
+    return json.dumps(row)
 
 
 @yielder
-def row_to_doc(row):
+def row_to_doc(raw):
+    row = json.loads(raw)
     doc = {
         "id": row["osm_type"] + str(row["osm_id"]),
         "lat": row['lat'],
@@ -116,4 +117,4 @@ def row_to_doc(row):
     row['source'] = 'OSM'
     # See https://wiki.osm.org/wiki/Nominatim/Development_overview#Country_to_street_level  # noqa
     doc['importance'] = (row.get('rank_search', 30) / 30) * 0.1
-    return doc
+    return json.dumps(row)

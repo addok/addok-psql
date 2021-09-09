@@ -1,5 +1,5 @@
 PSQL = {
-    'dbname': 'nominatim'
+    'database': 'nominatim'
 }
 PSQL_PROCESSORS = (
     'addok_psql.processors.query',
